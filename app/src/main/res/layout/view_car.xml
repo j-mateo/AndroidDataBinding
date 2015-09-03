@@ -6,7 +6,7 @@
             name="Car"
             type="com.mateoj.androiddatabinding.model.Car"/>
     </data>
-    <com.mateoj.androiddatabinding.CarView
+    <com.mateoj.androiddatabinding.view.CarView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <android.support.design.widget.AppBarLayout
@@ -146,5 +146,5 @@
             <!--android:src="@android:drawab"-->
             <!--android:layout_margin="@dimen/fab_margin"-->
             <!--android:clickable="true"/>-->
-    </com.mateoj.androiddatabinding.CarView>
+    </com.mateoj.androiddatabinding.view.CarView>
 </layout>

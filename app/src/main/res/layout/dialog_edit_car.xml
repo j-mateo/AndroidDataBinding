@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+    <data>
+        <variable
+            name="car"
+            type="com.mateoj.androiddatabinding.model.Car"/>
+    </data>
+    <LinearLayout
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:minWidth="300dp"
+              android:padding="@dimen/activity_horizontal_margin">
+        <EditText
+        android:text="@{car.year}"
+        android:inputType="number"
+        android:addTextChangedListener="@{car.yearWatcher}"
+        android:hint="Year"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+        <EditText
+        android:text="@{car.make}"
+        android:addTextChangedListener="@{car.makeWatcher}"
+        android:hint="Make"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+        <EditText
+        android:text="@{car.model}"
+        android:addTextChangedListener="@{car.modelWatcher}"
+        android:hint="Model"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+    </LinearLayout>
+</layout>

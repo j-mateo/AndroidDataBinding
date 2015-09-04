@@ -29,7 +29,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/car_image"
-                android:text="@{Car.displayName}"
+                android:text='@{Car.year + " " + Car.make + " " + Car.model}'
                 tools:text="Honda Accord 2012"
                 android:textAppearance="?android:textAppearanceMedium"/>
             <TextView

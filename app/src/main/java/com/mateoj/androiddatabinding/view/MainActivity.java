@@ -1,6 +1,9 @@
 package com.mateoj.androiddatabinding.view;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -11,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.mateoj.androiddatabinding.R;
+import com.mateoj.androiddatabinding.databinding.DialogEditCarBinding;
 import com.mateoj.androiddatabinding.databinding.ViewCarItemBinding;
 import com.mateoj.androiddatabinding.model.Car;
 import com.mateoj.androiddatabinding.model.CarsHelper;
@@ -70,18 +74,43 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public static class CarsAdapter extends RecyclerView.Adapter<CarsViewHolder> {
+    public class CarsAdapter extends RecyclerView.Adapter<CarsViewHolder> implements Car.OnCarChangeListener {
         private List<Car> mCars;
-
         @Override
         public CarsViewHolder onCreateViewHolder(ViewGroup parent, int i) {
             View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.view_car_item, parent, false);
-            return new CarsViewHolder(view);
+            final CarsViewHolder viewHolder = new CarsViewHolder(view);
+            view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    int pos = viewHolder.getAdapterPosition();
+                    openEditDialog(pos);
+                }
+            });
+            return viewHolder;
+        }
+
+        public Car getItem(int pos)
+        {
+            return (mCars == null) ? null : mCars.get(pos);
+        }
+
+        private void openEditDialog(int position)
+        {
+            EditDialogFragment fragment = new EditDialogFragment();
+            Bundle args = new Bundle();
+            args.putInt("carPos", position);
+            fragment.setArguments(args);
+            fragment.show(getSupportFragmentManager(), "dialog");
         }
 
         public void setCars(List<Car> cars) {
             this.mCars = cars;
             notifyDataSetChanged();
+            for (Car car : cars)
+            {
+                car.setOnChangeListener(this);
+            }
         }
 
         @Override
@@ -93,6 +122,35 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public int getItemCount() {
             return (mCars == null) ? 0 : mCars.size();
+        }
+
+        @Override
+        public void changed() {
+            notifyDataSetChanged();
+        }
+    }
+
+    @SuppressLint ("ValidFragment")
+    public class EditDialogFragment extends DialogFragment {
+
+        private int carPosition;
+
+        @Override
+        public void onCreate(@Nullable Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+            if (getArguments() != null) {
+                carPosition = getArguments().getInt("carPos");
+            }
+            setStyle(DialogFragment.STYLE_NORMAL, R.style.Base_Theme_AppCompat_Light_Dialog);
+
+        }
+
+        @Nullable @Override
+        public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+            View view = inflater.inflate(R.layout.dialog_edit_car, container, false);
+            DialogEditCarBinding binding = DialogEditCarBinding.bind(view);
+            binding.setCar(mCarsAdapter.getItem(carPosition));
+            return view;
         }
     }
 }
